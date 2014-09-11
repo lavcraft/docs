@@ -41,21 +41,97 @@ https://testjmb.alfabank.ru/api/oauth/authorize
 
 Сценарии 3-4 находятся в тестировании, докуменатция по ним не предоставлена.
  
-### Авториация. Сценарий 1
+### Авториация партнёра
 
-У партнёра должен быть логин и пароль.
+У партнёра должен быть логин и пароль. Для произведения любой операции, требуется аутентификация партнёра.
 
 С помощью логина и пароля можно произвести Basic аутентификацию на сервере авторизации. После чего появляется возможность получить токен для исполнения операций.
 
-Заголовки для авторизации:
+Формирование заголовка для авторизации:
 
 ```
 Authorization Basic base64(login:password)
 ```
 
+### Авторизация. Сценарий 1
 
+Запрос:
 
-Получение токена в случае
+```
+GET /auth/oauth/token?grant_type=password&username=9093&password=1212&scope=write HTTP/1.1
+Host: testjmb.alfabank.ru
+Authorization: Basic cGaadS5lMl51cHWHyX2vFDGg54wWDAGVDJDSfaAScx73hasDcMDAxsdjNxdioyK12sa/BcMCASDGASFgzMMISDFH
+Cache-Control: no-cache
+```
+grant_type  - определяет способ авторизации пользователя. password - данные пользователя сохранены в системе. Логин Пароль пользователя транслируются партнёром
+username    - идентификатор пользователя
+password    - пароль пользователя
+scope       - параметр тестировается, возможные варианты : "write read" "write" "read". Параметр зависит от прав, которыми наделёна учётка партнёра
+
+Ответ:
+```
+    "access_token": "d3277c32-2da2-4a4b-8efb-c3db8d99d04e",
+    "token_type": "bearer",
+    "expires_in": 43199,
+    "refresh_token": "d327dsa2c2-2sa2-4a4b-8-9sdfg4e8d04e",
+    "scope": "read write"
+}
+```
+
+access_token    - основной токен для произведения операций
+refresh_token   - токен для получение access_token в случае если он истекает или утерян.
+expires_in      - время в секундах то истечения срока действия токена
+
+### Авторизация. Сценарий 2
+
+Запрос:
+
+```
+GET /auth/oauth/token?grant_type=client_credentials&scope=read write HTTP/1.1
+Host: testjmb.alfabank.ru
+Authorization: Basic cGaadS5lMl51cHWHyX2vFDGg54wWDAGVDJDSfaAScx73hasDcMDAxsdjNxdioyK12sa/BcMCASDGASFgzMMISDFH
+Cache-Control: no-cache
+```
+
+grant_type   - определяет способ авторизации пользователя. client_credentials - оставляет проверку личности пользователя на стороне клиента, повышая риск и необходимость
+прохождения сертификации в случае использования или передачи личных данных.
+scope       - параметр тестировается, возможные варианты : "write read" "write" "read". Параметр зависит от прав, которыми наделёна учётка партнёра
+
+Ответ:
+
+```
+{
+    "access_token": "d3277c36-133su2-4a4a-2agb-c5ab8n99f04h",
+    "token_type": "bearer",
+    "expires_in": 43199,
+    "scope": "read write"
+}
+```
+
+### Авторизация. Переполучение токена при помощи refresh_token
+
+В случае если на запрос токена был так же выдан refresh_token, то получить новый токен можно с помощью refresh_token
+
+Запрос:
+
+```
+GET /auth/oauth/token?grant_type=refresh_token&refresh_token=... HTTP/1.1
+Host: testjmb.alfabank.ru
+Authorization: Basic cGaadS5lMl51cHWHyX2vFDGg54wWDAGVDJDSfaAScx73hasDcMDAxsdjNxdioyK12sa/BcMCASDGASFgzMMISDFH
+Cache-Control: no-cache
+```
+
+### Авторизация по токену
+
+При всех нижеперчисленных запросах, требуется прикрепление токена к запросу, если не указано иначе.
+
+Прикрепление токена производится добавлением, полученных на предыдущих этапах,типа и значения токена к полю Authorization
+
+Пример
+
+```
+Authorization: Bearer d3277c36-133su2-4a4a-2agb-c5ab8n99f04h
+```
 
 ## POST /fee
 
