@@ -152,6 +152,13 @@ Content-Type: application/json
 }
 ```
 
+sender_type     - тип источника перевода. Доступные типы: "cnm" - карта
+sender_value    - значение источника перевода
+recipient_type  - тип получателя перевода. Доступные типы: "cnm" - карта
+recipient_value - значение получателя
+amount          - сумма перевода
+currency        - валюта. Доступные: "RUR"
+
 Ответ
 
 ```
@@ -163,6 +170,12 @@ Content-Type: application/json
     "max": "-100"
 }
 ```
+
+fee         - общая сумма комисси в "минимально возможной", "неделимой", валютной единицеы
+interest    - процентная часть комиссии
+constant    - обязательная часть комиссии
+min         - сумма, ниже которой комиссия быть не может
+max         - сумма, выше которой комиссия быть не может
 
 Ошибка
 
@@ -196,6 +209,16 @@ Content-Type: application/json
 }
 ```
 
+sender_type     - тип источника перевода. Доступные типы: "cnm" - карта
+sender_value    - значение источника перевода
+recipient_type  - тип получателя перевода. Доступные типы: "cnm" - карта
+recipient_value - значение получателя
+exp_date        - данные карты
+cvv             - данные карты
+amount          - сумма перевода
+currency        - валюта. Доступные: "RUR"
+client_ip       - ip адрес источника перевода
+
 Ответ
 
 ```
@@ -206,6 +229,11 @@ Content-Type: application/json
     "pareq": "eJxlUttuozAQ/RXEe/GFS2g0cUVLquaBLsp2+1q5ME1YhUttKOl+/dqEpLvqg61zxuO5nBm4OdYH5wOVrtpm5TKPug42RVtWzW7l/nq6v4rdGwFPe4WY/sRiUCggQ63lDp2qXLm13nnMFZAnW3wXMEcSJpDHgZyp+aKKvWx6AbJ4v908ijCIo4UPZKZQo9qkgnHm+3y6fUrpBAIgp0doZI3iLtmm3F5Ovt6un3+kQCY7FO3Q9OpTRIEJeyYwqIPY932nl4SM4+jJw5vsWtXLg6cGMuLri0b1URVIcp6/9Eo2+g0VAWI/AvmqOx8s0ibRsSpFlibj6axplm7Gx3RzzH4nn9mf9QqI9YBS9ig4ZQGNaOQwvqTxMqBAJjvI2lYomFHghKCzCZKL+V8KRndlxnJu7swAj13boPEwWl8wlKiL7zo53dyBKcE6APlq6e7BDqbojcpXLKRReB3TIPYCvgj9ax7QOPJDGkZ2XJOTTVwZedmCsimzJUBsGDJvApm3xKD/tucvuCzKMA=="
 }
 ```
+
+termURL - адрес на который необходимо произвести редирект пользователя с АБС банка, при проведении 3DSecure
+acsURL  - адресс АБС банка эмитента карты
+md      - параметр безопасности для БАС
+pareq   - параметр безопасности для БАС
 
 Ошибка
 
